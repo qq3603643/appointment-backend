@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<script type="text/javascript">
+		var Da = <%- JSON.stringify(data) %>;
+		console.log(Da);
+	</script>
+</head>
+<body>
+
+	<div>
+		author: <%= name %>
+	</div>
+
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript">
+		$(document).on('click', addroom);
+		function addroom()
+		{
+			$.ajax(
+			{
+				url: 'addroom',
+				type: 'POST',
+				data:
+				{
+					roomid: '1',
+					username: 'tangerine',
+					reason: 'none',
+					starttime: '2222',
+					endtime: '3333'
+				}
+			})
+			.done(
+				function(da)
+				{
+					console.log(da);
+				}
+				)
+		};
+	</script>
+</body>
+</html>
