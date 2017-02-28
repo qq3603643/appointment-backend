@@ -39,6 +39,9 @@ server.engine('html', consolidate.ejs);
 //router
 server.use('/', require('./routers/index.js')());
 
+//socket
+require('./routers/socket.js')();
+
 //static
 server.use(static('./public'));
 

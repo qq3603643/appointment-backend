@@ -26,11 +26,11 @@
 				type: 'POST',
 				data:
 				{
-					roomid: '1',
+					roomid: '0',
 					username: 'tangerine',
 					reason: 'none',
-					starttime: '2222',
-					endtime: '3333'
+					starttime: '3333',
+					endtime: '4444'
 				}
 			})
 			.done(
@@ -40,6 +40,55 @@
 				}
 				)
 		};
+
+		getrooms();
+
+		function getrooms()
+		{
+			$.ajax(
+			{
+				url: 'getall',
+				type: 'POST'
+			})
+			.done(
+				function(da)
+				{
+					console.log(da);
+				}
+				)
+		}
+	</script>
+
+	<script type="text/javascript" src="socket.io.js"></script>
+	<script type="text/javascript">
+		var socket = io.connect('ws://192.168.2.244:7777');
+
+		function createid()
+		{
+			return new Date().getTime()+""+Math.floor(Math.random()*899+100);
+		}
+
+		function createname()
+		{
+			function getChar()
+			{
+				eval( "var wordxxxxx=" +  '"\\u' + (Math.round(Math.random() * 20901) + 19968).toString(16)+'"');
+
+				return wordxxxxx;
+			}
+
+			return getChar() + getChar();
+		}
+
+		socket.emit('login',				//send
+		{
+			userid: createid,
+			username: createname
+		});
+		socket.on('login', function(da)		//receive
+		{
+			console.log(da);
+		})
 	</script>
 </body>
 </html>
