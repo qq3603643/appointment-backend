@@ -6,13 +6,18 @@ const express = require('express'),
       sessionParser = require('cookie-session'),
       consolidate   = require('consolidate');
 
-const server = express();
+const app = express(),
+	  http   = require('http').Server(app),
+	  io     = require('socket.io')(http);
+
+//socket
+require('./routers/socket.js')(io);
 
 // cookie
-server.use(cookieParser('xjc'));
+app.use(cookieParser('xjc'));
 
 //session
-server.use(sessionParser(
+app.use(sessionParser(
 {
 	name: 'sess',
 	keys: (()=>{
@@ -26,23 +31,23 @@ server.use(sessionParser(
 }))
 
 //post
-server.use(bodyParser.urlencoded({ extended: !1 }));
+app.use(bodyParser.urlencoded({ extended: !1 }));
 
 //file
-server.use(multer({dest: './public/upload'}).any());
+app.use(multer({dest: './public/upload'}).any());
 
 //template engine
-server.set('view engine', 'html');
-server.set('views', './public/template');
-server.engine('html', consolidate.ejs);
+app.set('view engine', 'html');
+app.set('views', './public/template');
+app.engine('html', consolidate.ejs);
 
 //router
-server.use('/', require('./routers/index.js')());
-
-//socket
-require('./routers/socket.js')();
+app.use('/', require('./routers/index.js')());
 
 //static
-server.use(static('./public'));
+app.use(static('./public'));
 
-server.listen(7777);
+http.listen(3333, () =>
+	{
+		console.log('port3333 is watching')
+	});

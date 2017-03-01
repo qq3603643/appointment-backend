@@ -15,7 +15,7 @@
 		author: <%= name %>
 	</div>
 
-	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="./jquery.js"></script>
 	<script type="text/javascript">
 		$(document).on('click', addroom);
 		function addroom()
@@ -59,9 +59,9 @@
 		}
 	</script>
 
-	<script type="text/javascript" src="socket.io.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
-		var socket = io.connect('ws://192.168.2.244:7777');
+		var socket = io.connect('http://localhost:3333');
 
 		function createid()
 		{
@@ -82,8 +82,8 @@
 
 		socket.emit('login',				//send
 		{
-			userid: createid,
-			username: createname
+			userid: createid(),
+			username: createname()
 		});
 		socket.on('login', function(da)		//receive
 		{

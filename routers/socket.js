@@ -1,8 +1,5 @@
-const server = require('express')(),
-	  http   = require('http').Server(server),
-	  io     = require('socket.io')(http);
 
-module.exports = () =>
+module.exports = (io) =>
 {
 	var onlineUsers = new Object,
 	    onlineCount = 0;
@@ -11,7 +8,6 @@ module.exports = () =>
     io.on('connection', (socket) =>
     {
     	console.log('a user connect');
-    	socket.set("origins","*");
     	socket.on('login', (userinfo) =>
     	{
     		socket.name = userinfo.userid;
