@@ -1,55 +1,38 @@
+const Socket = require('../models/socket.js');
 
 module.exports = (io) =>
 {
-	var onlineUsers = new Object,
-        sockets     = new Object,
-	    onlineCount = 0;
+    var container = new Socket();
 
-	// create connect
     io.on('connection', (socket) =>
     {
-    	console.log('a user connect');
-    	socket.on('login', (userinfo) =>
-    	{
-    		socket.name = userinfo.userid;
-    		if(!onlineUsers.hasOwnProperty(userinfo.userid))
-			{
-				onlineUsers[userinfo.userid] = userinfo.username;
-                sockets[userinfo.userid]     = socket;
-				onlineCount ++;
-			}
+        console.log('a client connect');
 
-			io.emit('login', { onlineUsers: onlineUsers, onlineCount: onlineCount });
-			console.log(`${ userinfo.userid } 进入系统`);
-    	})
+        socket.on('login', (o) =>
+        {
+            container.add(o.userid, socket);
+            socket.name = o.userid;
 
-    	socket.on('disconnect', () =>
-    	{
-    		if(onlineUsers.hasOwnProperty(socket.name))
-			{
-				var userinfo_Signout = { userid: socket.name, username: onlineUsers[socket.name] };
-
-				delete onlineUsers[socket.name];
-                delete sockets[socket.name];
-				onlineCount --;
-
-				io.emit('signout', { onlineUsers: onlineUsers, onlineCount: onlineCount });
-				console.log(`${ userinfo_Signout.userid } 退出系统`);
-			}
-    	})
-
-    	socket.on('message', (obj) =>
-    	{
-    		//io.emit('message', obj);  //all user
-            for(var k in onlineUsers)   //special user
+            io.emit('login', { userid: o.userid, onlineCount: container.size() });
+            container.except(socket).forEach(otherSocket =>
             {
-                if(onlineUsers.hasOwnProperty(k) && k != socket.name)
-                {
-                    sockets[k].emit('message', obj);
-                }
-            }
-    		console.log(obj);
-    	})
-    })
+                otherSocket.emit('welcome', { userid: o.userid })
+            })
 
+            console.log(`${o.userid} 进入系统`);
+        })
+
+        socket.on('message', (o) =>
+        {
+            io.emit('message', o);
+        })
+
+        socket.on('disconnect', () =>
+        {
+            container.delete(socket.name);
+            io.emit('logout', { userid: socket.name, onlineCount: container.size() });
+
+            console.log(`${socket.id} 退出系统`)
+        })
+    })
 }

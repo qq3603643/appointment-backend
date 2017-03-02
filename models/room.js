@@ -10,9 +10,8 @@ const roomSchema = new Schema(
 			username: { type: String, required: true },    //使用者名字
 			starttime: { type: String, required: true },   //开始时间
 			endtime: { type: String, required: true },     //结束时间
-			reason: { type: String }       //使用理由
-		}
-		),
+			reason: { type: String }                       //使用理由
+		}),
 	  room = mongoose.model('rooms', roomSchema),
 	  Room = new Function;
 

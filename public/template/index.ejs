@@ -9,6 +9,7 @@
 			display: inline-block;
 			width: 100px;height: 25px;line-height: 25px;
 			box-shadow: 0 0 1px rgba(0, 0, 0, .6);
+			cursor: pointer;
 		}
 		.btn:hover
 		{
@@ -88,24 +89,36 @@
 			constructor: User,
 			say: function(content)
 			{
-				this.socket.emit('message', { userid: this.userid, username: this.username, content: content });
+				this.socket.emit('message', { userid: this.userid, content: content });
 			},
 			listen: function()
 			{
+				var currentid = this.userid;
+
 				this.socket.on('message', function(da)
-				{alert()
+				{
+					var str = da.userid == currentid ? '#您said#: ' : '#'+da.userid+'#said: ';
 					$('body').append(
-						$('<p>', { html: da.username+'say: '+da.content })
+						$('<p>', { html: str + da.content })
+						);
+				})
+				this.socket.on('logout', function(da)
+				{
+					$('body').append(
+						$('<p>', { html: da.userid + '退出系统，当前在线人数' + da.onlineCount })
 						);
 				})
 			},
 			login: function()
 			{
-				this.socket.emit('login', { userid: this.userid, username: this.username });
+				var currentid = this.userid;
+
+				this.socket.emit('login', { userid: this.userid });
 				this.socket.on('login', function(da)
 				{
+					var str = da.userid == currentid ? '恭喜您进入成功' : '用户'+da.userid+'进入成功';
 					$('body').append(
-						$('<p>', { html: '成功进入，当前在线人数：'+da.onlineCount })
+						$('<p>', { html: str + '，当前在线人数：'+da.onlineCount })
 						);
 				})
 			},
@@ -116,25 +129,12 @@
 					return new Date().getTime()+""+Math.floor(Math.random()*899+100);
 				}
 
-				function createname()
-				{
-					function getChar()
-					{
-						eval( "var wordxxxxx=" +  '"\\u' + (Math.round(Math.random() * 20901) + 19968).toString(16)+'"');
-
-						return wordxxxxx;
-					}
-
-					return getChar() + getChar();
-				}
-
 				function createsocket()
 				{
 					return io.connect('http://localhost:3333');
 				}
 
 				this.userid = createid();
-				this.username = createname();
 				this.socket   = createsocket();
 			}
 		}
