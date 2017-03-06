@@ -1,4 +1,5 @@
-const Socket = require('../models/socket.js');
+const Socket = require('../models/socket.js'),
+      room   = require('../models/room.js');
 
 module.exports = (io) =>
 {
@@ -27,6 +28,21 @@ module.exports = (io) =>
             io.emit('message', o);
         })
 
+        socket.on('addroom', (o) =>
+        {
+            console.log(`${ o.roomitem.username }预定会议室`);
+            room.addroom(o.roomitem, (err) =>
+            {
+                if(err)
+                    console.log(err);
+                else
+                {
+                    console.log(`${ o.roomitem.username }预定会议室成功`);
+                    io.emit('addroom', o);
+                }
+            })
+        })
+
         socket.on('disconnect', () =>
         {
             container.delete(socket.name);
@@ -34,5 +50,6 @@ module.exports = (io) =>
 
             console.log(`${socket.id} 退出系统`)
         })
+
     })
 }
