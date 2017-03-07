@@ -1,151 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<style type="text/css">
-		.btn
-		{
-			display: inline-block;
-			width: 100px;height: 25px;line-height: 25px;
-			box-shadow: 0 0 1px rgba(0, 0, 0, .6);
-			cursor: pointer;
-		}
-		.btn:hover
-		{
-			background-image: linear-gradient(to bottom, rgba(0, 0, 0, .15), rgba(0, 0, 0, .15));
-		}
-	</style>
-	<script type="text/javascript">
-		var Da = <%- JSON.stringify(data) %>;
-		console.log(Da);
-	</script>
-</head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>index</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<link href="main.min.css?f6d43eafcf18eaf6efb3" rel="stylesheet"></head>
 <body>
+	<div id="root"></div>
 
-	<div>
-		author: <%= name %>
-	</div>
-
-	<textarea id="content"></textarea>
-	<p id="say" class="btn">sendMessage</p>
-
-	<script type="text/javascript" src="./jquery.js"></script>
+	<script type="text/javascript" src="http://localhost:3333/socket.io/socket.io.js"></script>
 	<script type="text/javascript">
-		// $(document).on('click', addroom);
-		function addroom()
-		{
-			$.ajax(
-			{
-				url: 'addroom',
-				type: 'POST',
-				data:
-				{
-					roomid: '0',
-					username: 'tangerine',
-					reason: 'none',
-					starttime: '3333',
-					endtime: '4444'
-				}
-			})
-			.done(
-				function(da)
-				{
-					console.log(da);
-				}
-				)
-		};
+/**
+	config 正式环境将通过后台模板引擎生成
+*/
+		window.$GLOBALCONFIG = {};
 
-		getrooms();
-
-		function getrooms()
+		void function(global)
 		{
-			$.ajax(
-			{
-				url: 'getall',
-				type: 'POST'
-			})
-			.done(
-				function(da)
+			//serverpath
+			global.$ctx = 'http://localhost:3333';
+
+			global.$LOGOINFO = {
+				logoSrc: './pics/psb.jpg'
+			};
+
+			//导航数据 一二级
+			global.$NAVIGATION = [
 				{
-					console.log(da);
+					name: 'YW Tools',
+					iconType: 'calculator',
+					children: [
+						{
+							name: 'meeting room manager'
+						}
+					]
+				},
+				{
+					name: 'YW Tools2',
+					iconType: 'calculator',
+					children: [
+						{
+							name: 'meeting room manager2'
+						}
+					]
 				}
-				)
-		}
+			];
+
+		}(window.$GLOBALCONFIG);
 	</script>
-
-	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-	<script type="text/javascript">
-
-		function User()
-		{
-			this.init();
-			this.login();
-			this.listen();
-		};
-
-		User.prototype =
-		{
-			constructor: User,
-			say: function(content)
-			{
-				this.socket.emit('message', { userid: this.userid, content: content });
-			},
-			listen: function()
-			{
-				var currentid = this.userid;
-
-				this.socket.on('message', function(da)
-				{
-					var str = da.userid == currentid ? '#您said#: ' : '#'+da.userid+'#said: ';
-					$('body').append(
-						$('<p>', { html: str + da.content })
-						);
-				})
-				this.socket.on('logout', function(da)
-				{
-					$('body').append(
-						$('<p>', { html: da.userid + '退出系统，当前在线人数' + da.onlineCount })
-						);
-				})
-			},
-			login: function()
-			{
-				var currentid = this.userid;
-
-				this.socket.emit('login', { userid: this.userid });
-				this.socket.on('login', function(da)
-				{
-					var str = da.userid == currentid ? '恭喜您进入成功' : '用户'+da.userid+'进入成功';
-					$('body').append(
-						$('<p>', { html: str + '，当前在线人数：'+da.onlineCount })
-						);
-				})
-			},
-			init: function()
-			{
-				function createid()
-				{
-					return new Date().getTime()+""+Math.floor(Math.random()*899+100);
-				}
-
-				function createsocket()
-				{
-					return io.connect('http://localhost:3333');
-				}
-
-				this.userid = createid();
-				this.socket   = createsocket();
-			}
-		}
-
-		var i = new User();
-
-		$('#say').on('click', function()
-		{
-			i.say($('#content').val());
-		})
-
-	</script>
-</body>
+<script type="text/javascript" src="main.min.js?f6d43eafcf18eaf6efb3"></script></body>
 </html>

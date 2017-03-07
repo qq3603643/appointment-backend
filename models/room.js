@@ -2,7 +2,8 @@
 	room
 **/
 const mongoose = require('./mongoose.js'),
-	  Schema  = mongoose.Schema;
+	  Schema   = mongoose.Schema,
+	  t        = require('../untils/common.js');
 
 const roomSchema = new Schema(
 		{
@@ -25,11 +26,70 @@ Room.prototype =
 			cb(err, obj);
 		})
 	},
+	isoccupied: function(roomitem, cb)
+	{
+		const roomid = roomitem.roomid,
+			  starttime = roomitem.starttime,
+			  endtime = roomitem.endtime;
+		var res =
+		{
+			error: null,
+			isoccupied: null,
+			data: null
+		};
+
+		this.getallrooms((err, data) =>
+		{
+			if(err)
+			{
+				console.error(err);
+				res.error = err;
+				cb(res);
+				return;
+			}
+
+			if(data.length == 0)
+			{
+				cb(res);
+				return;
+			}
+
+			var i = 0,
+				_roomitem;
+
+			while(_roomitem = data[i++])
+			{
+				if(_roomitem.roomid == roomitem.roomid)
+				{
+					var _starttime = _roomitem.starttime,
+						_endtime   = _roomitem.endtime;
+
+					if(t.isoverlap(t.toMinutes(starttime) + 1, t.toMinutes(_starttime), t.toMinutes(_endtime))
+						|| t.isoverlap(t.toMinutes(endtime) - 1, t.toMinutes(_starttime), t.toMinutes(_endtime)))
+					{
+						res.isoccupied = !0;
+						res.data = _roomitem;
+						cb(res);
+						break;
+					}
+				}
+			}
+
+			if(!res.isoccupied)	cb(res);
+		})
+	},
 	addroom: function(obj, cb)
 	{
 		const instance = new room(obj);
 
 		instance.save((err) =>
+		{
+			cb(err);
+		})
+	},
+	deleteall: function(cb)
+	{
+		room.remove({}, (err) =>
 		{
 			cb(err);
 		})

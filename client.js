@@ -47,6 +47,9 @@ app.use('/', require('./routers/index.js')());
 //static
 app.use(static('./public'));
 
+//schedule
+require('./untils/schedule.js')();
+
 http.listen(3333, () =>
 	{
 		console.log('port3333 is watching')

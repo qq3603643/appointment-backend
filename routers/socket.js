@@ -31,15 +31,34 @@ module.exports = (io) =>
         socket.on('addroom', (o) =>
         {
             console.log(`${ o.roomitem.username }预定会议室`);
-            room.addroom(o.roomitem, (err) =>
+
+            room.isoccupied(o.roomitem, (res) =>
             {
-                if(err)
-                    console.log(err);
-                else
+                if(res.error != null)       //database query failed
                 {
-                    console.log(`${ o.roomitem.username }预定会议室成功`);
-                    io.emit('addroom', o);
+                    console.log(res.error);
+                    socket.emit('error_room', { type: 'addroom_database_query', error: '数据库查询失败' });
+                    return;
                 }
+                if(res.isoccupied)          //occupied
+                {
+                    socket.emit('error_room', { type: 'addroom_occupied', data: res.data });
+                    return;
+                }
+
+                room.addroom(o.roomitem, (err) =>
+                {
+                    if(err)
+                    {
+                        console.log(err);
+                        socket.emit('error_room', { type: 'addroom_database_query', error: '数据库插入失败' });
+                    }
+                    else
+                    {
+                        console.log(`${ o.roomitem.username }预定会议室成功`);
+                        io.emit('addroom', o);
+                    }
+                })
             })
         })
 
