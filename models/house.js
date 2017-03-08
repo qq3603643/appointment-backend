@@ -22,6 +22,24 @@ House.prototype =
 		{
 			cb(err, obj);
 		})
+	},
+	getallhouse_p: function()
+	{
+		return new Promise((resolve, reject) =>
+		{
+			house.find({}, (err, obj) =>
+			{
+				if(err)
+				{
+					console.log(err);
+					reject(err);
+				}
+				else
+				{
+					resolve(obj);
+				}
+			})
+		})
 	}
 }
 

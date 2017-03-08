@@ -26,6 +26,24 @@ Room.prototype =
 			cb(err, obj);
 		})
 	},
+	getallrooms_p: function()
+	{
+		return new Promise((resolve, reject) =>
+		{
+			room.find({}, (err, obj) =>
+			{
+				if(err)
+				{
+					console.log(err);
+					reject(err);
+				}
+				else
+				{
+					resolve(obj);
+				}
+			})
+		})
+	},
 	isoccupied: function(roomitem, cb)
 	{
 		const roomid = roomitem.roomid,
@@ -87,6 +105,26 @@ Room.prototype =
 			cb(err);
 		})
 	},
+	addroom_p: function(obj)
+	{
+		const instance = new room(obj);
+
+		return new Promise((resolve, reject) =>
+		{
+			instance.save(err =>
+			{
+				if(err)
+				{
+					console.log(err);
+					reject(err);
+				}
+				else
+				{
+					resolve();
+				}
+			})
+		})
+	},
 	deleteall: function(cb)
 	{
 		room.remove({}, (err) =>
@@ -94,11 +132,47 @@ Room.prototype =
 			cb(err);
 		})
 	},
+	deleteall_p: function()
+	{
+		return new Promise((resolve, reject) =>
+		{
+			room.remove({}, err =>
+			{
+				if(err)
+				{
+					console.log(err);
+					reject(err);
+				}
+				else
+				{
+					resolve();
+				}
+			})
+		})
+	},
 	deleteById: function(id, cb)
 	{
 		room.remove({ _id: id }, (err) =>
 		{
 			cb(err);
+		})
+	},
+	deleteById_p: function(id)
+	{
+		return new Promise((resolve, reject) =>
+		{
+			room.remove({ _id: id }, err =>
+			{
+				if(err)
+				{
+					console.log(err);
+					reject(err);
+				}
+				else
+				{
+					resolve();
+				}
+			})
 		})
 	}
 }

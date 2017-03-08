@@ -1,5 +1,5 @@
 const express = require('express'),
-      static  = require('express-static'),
+      staticLib  = require('express-static'),
       bodyParser = require('body-parser'),
       multer     = require('multer'),
       cookieParser  = require('cookie-parser'),
@@ -7,9 +7,10 @@ const express = require('express'),
       consolidate   = require('consolidate');
 
 const app = express(),
-	  http   = require('http').Server(app),
-	  io     = require('socket.io')(http);
+	  http = require('http').Server(app),
+	  io   = require('socket.io')(http);
 
+const $CONFIG_G = require('./untils/config.js');
 //socket
 require('./routers/socket.js')(io);
 
@@ -45,12 +46,12 @@ app.engine('html', consolidate.ejs);
 app.use('/', require('./routers/index.js')());
 
 //static
-app.use(static('./public'));
+app.use(staticLib('./public'));
 
 //schedule
 require('./untils/schedule.js')();
 
-http.listen(3333, () =>
-	{
-		console.log('port3333 is watching')
-	});
+http.listen($CONFIG_G.$port, () =>
+{
+	console.log(`port${ $CONFIG_G.$port } is watching`)
+});

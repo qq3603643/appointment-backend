@@ -46,19 +46,31 @@ module.exports = (io) =>
                     return;
                 }
 
-                room.addroom(o.roomitem, (err) =>
-                {
-                    if(err)
-                    {
-                        console.log(err);
-                        socket.emit('error_room', { type: 'addroom_database_query', error: '数据库插入失败' });
-                    }
-                    else
+                // room.addroom(o.roomitem, (err) =>
+                // {
+                //     if(err)
+                //     {
+                //         console.log(err);
+                //         socket.emit('error_room', { type: 'addroom_database_query', error: '数据库插入失败' });
+                //     }
+                //     else
+                //     {
+                //         console.log(`${ o.roomitem.username }预定会议室成功`);
+                //         io.emit('addroom', o);
+                //     }
+                // })
+
+                room.addroom_p(o.roomitem)
+                    .then(() =>
                     {
                         console.log(`${ o.roomitem.username }预定会议室成功`);
                         io.emit('addroom', o);
-                    }
-                })
+                    })
+                    .catch(err =>
+                    {
+                        console.log(err);
+                        socket.emit('error_room', { type: 'addroom_database_query', error: '数据库插入失败' });
+                    })
             })
         })
 
