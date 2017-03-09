@@ -42,7 +42,7 @@ const getdate = () =>
 
 module.exports = () =>
 {
-	schedule.scheduleJob('00 00 00 * * *', () =>
+	schedule.scheduleJob('00 00 10 * * *', () =>
 	{
 		room.getallrooms((err, data) =>
 		{

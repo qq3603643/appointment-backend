@@ -5,7 +5,7 @@
   "main": "client.js",
   "scripts": {
     "start": "node client.js",
-    "forever": "forever start -l forever.log -o out.log -e err.log client.js",
+    "forever": "forever start -a -l forever.log -o out.log -e err.log -w client.js",
     "test": "npm start"
   },
   "repository": {
