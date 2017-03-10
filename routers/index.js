@@ -2,7 +2,8 @@ const express = require('express'),
 	  room  = require('../models/room.js'),
 	  house = require('../models/house.js');
 
-const $CONFIG_G = require('../untils/config.js');
+const $CONFIG_G = require('../untils/config.js'),
+	  t         = require('../untils/common.js');
 
 module.exports = () =>
 {
@@ -10,10 +11,12 @@ module.exports = () =>
 
 	router.get('/', (req, res, next) =>
 	{
+		console.log(t.getClientIp(req));
+
 		res.render(
 			'index.ejs',
 			{
-				$ctx: `http://localhost:${ $CONFIG_G.$port }`
+				$ctx: $CONFIG_G.$ctx
 		    }
 			);
 	})

@@ -10,5 +10,12 @@ module.exports =
 	isoverlap(n, min, max)
 	{
 		return n >= min && n <= max;
+	},
+	getClientIp(req)
+	{
+		return req.headers['x-forwarded-for']
+		       || req.connection.remoteAddress
+		       || req.socket.remoteAddress
+		       || req.connection.socket.remoteAddress;
 	}
 }

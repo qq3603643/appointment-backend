@@ -1,4 +1,4 @@
-const express = require('express'),
+const express    = require('express'),
       staticLib  = require('express-static'),
       bodyParser = require('body-parser'),
       multer     = require('multer'),
@@ -6,7 +6,7 @@ const express = require('express'),
       sessionParser = require('cookie-session'),
       consolidate   = require('consolidate');
 
-const app = express(),
+const app  = express(),
 	  http = require('http').Server(app),
 	  io   = require('socket.io')(http);
 
