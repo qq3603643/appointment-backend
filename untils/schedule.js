@@ -9,7 +9,7 @@ const getdate = () =>
 	  {
 			const d = new Date(),
 				  _y = d.getFullYear(),
-				  _m = d.getMonth(),
+				  _m = d.getMonth() + 1,
 				  _d = d.getDate();
 
 		    return [_y, _m, _d].join('_');
