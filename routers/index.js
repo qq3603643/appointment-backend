@@ -106,5 +106,10 @@ module.exports = () =>
 			 })
 	})
 
+	router.post('/loginCheck', (req, res, next) =>
+	{
+		console.log(req.body);
+	})
+
 	return router;
 }

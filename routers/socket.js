@@ -1,9 +1,8 @@
-const Socket = require('../models/socket.js'),
-      room   = require('../models/room.js');
+const room  = require('../models/room.js');
 
 module.exports = (io) =>
 {
-    var container = new Socket();
+    var container = require('../models/socket.js');
 
     io.on('connection', (socket) =>
     {

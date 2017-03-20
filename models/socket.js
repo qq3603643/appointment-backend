@@ -79,7 +79,13 @@ Socket.prototype =
 		{
 			return o.socket;
 		})
+	},
+	repalceuid: function(uid_origin, uid_future)
+	{
+		this.sockets = this.sockets.reduce((list, socket) =>
+		{
+		}, new Array())
 	}
 }
 
-module.exports = Socket;
+module.exports = new Socket();
