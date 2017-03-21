@@ -63,6 +63,22 @@ module.exports = () =>
 						return;
 					}
 					console.log('new day is starting, good luck');
+					/* 人力资源部每天自动全选 **/
+					room.addroom_p(
+						{ roomid: '005',
+						  username: '行政部',
+						  starttime: '09:00',
+						  endtime: '18:00',
+						  reason: ''
+						})
+						.then(() =>
+						{
+							console.log('autoly addroom succes');
+						})
+						.catch((err) =>
+						{
+							console.log(err);
+						})
 				})
 			})
 			.catch((err) =>

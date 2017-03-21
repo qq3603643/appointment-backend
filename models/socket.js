@@ -19,9 +19,14 @@ Socket.prototype =
 	{
 		return this.size() == 0;
 	},
-	size: function()					  //size 即连接人数
+	size: function()					  //size 即连接人数(多个用户算作一个)
 	{
-		return this.sockets.length;
+		return this.sockets.reduce((str, socket) =>
+			   {
+					if(~str.indexOf(socket.userid))
+						return str;
+					return str.concat(socket.userid);
+			   }, new Array).length;
 	},
 	isExist: function(userid)	          //检测是否已存在
 	{
@@ -45,8 +50,8 @@ Socket.prototype =
 	},
 	add: function(userid, socketitem)	  //添加连接
 	{
-		if(!this.isExist(userid))
-			this.sockets.push(new User(userid, socketitem));
+		// if(!this.isExist(userid))
+		this.sockets.push(new User(userid, socketitem));
 
 		return this;
 	},
@@ -66,6 +71,10 @@ Socket.prototype =
 
 		return this;
 	},
+	delete_s: function(socket)
+	{
+		this.sockets = this.sockets.filter(o => o.socket != socket);
+	},
 	all: function()                      //获取所有连接实例
 	{
 		return this.socket.map(function(o)
@@ -82,9 +91,14 @@ Socket.prototype =
 	},
 	repalceuid: function(uid_origin, uid_future)
 	{
-		this.sockets = this.sockets.reduce((list, socket) =>
+		this.sockets = this.sockets.map((socket) =>
 		{
-		}, new Array())
+			return socket.userid == uid_origin
+				   ? new User(uid_future, socket.socket)
+				   : socket;
+		})
+
+		return this;
 	}
 }
 

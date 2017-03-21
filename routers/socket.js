@@ -75,7 +75,7 @@ module.exports = (io) =>
 
         socket.on('disconnect', () =>
         {
-            container.delete(socket.name);
+            container.delete_s(socket);
             io.emit('logout', { userid: socket.name, onlineCount: container.size() });
 
             console.log(`${socket.id} 退出系统`)

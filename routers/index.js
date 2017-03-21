@@ -1,6 +1,7 @@
 const express = require('express'),
 	  room  = require('../models/room.js'),
-	  house = require('../models/house.js');
+	  house = require('../models/house.js'),
+	  user  = require('../models/user.js');
 
 const $CONFIG_G = require('../untils/config.js'),
 	  t         = require('../untils/common.js');
@@ -108,7 +109,18 @@ module.exports = () =>
 
 	router.post('/loginCheck', (req, res, next) =>
 	{
-		console.log(req.body);
+		res.cookie('test', 'testconetent', { domain: '.ypzdw.com', path: 'appoint', maxAge: 60 * 60 * 1e3 })
+		console.log(req.cookies)
+		user.isExist_p(req.body.userid)
+			.then(da =>
+			{
+				res.send({ status: 1, msg: 'success', data: da });
+			})
+			.catch(err =>
+			{
+				console.log(err);
+				res.send({ status: 0, msg: 'database error' }).end();
+			})
 	})
 
 	return router;
