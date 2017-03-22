@@ -51,6 +51,30 @@ User.prototype =
 				else  		 resolve(da);
 			})
 		})
+	},
+	validateU_p: function(o)
+	{
+		const username = o.username,
+		      password = o.password;
+
+		return new Promise((resolve, reject) =>
+		{
+			user.findOne({ username: username }, (err, da) =>
+			{
+				if(err)
+				{
+					console.log(err);
+					reject(err);
+					return;
+				}
+				var _isEmpty = !1;
+				try{ _isEmpty = da.length == 0 || da == null || password != da.password }
+				catch(er){}
+				/* isExist_p.then(da => { if(da) console.log('exist') }) **/
+				if(_isEmpty) resolve(null);
+				else  		 resolve(da);
+			})
+		})
 	}
 }
 

@@ -1,7 +1,7 @@
 /* stime: '10:00' **/
 module.exports =
 {
-	toMinutes(stime)
+	toMinutes(stime)              //convert '10:10' to minutes
 	{
 		const at = stime.split(/[^0-9]/);
 
@@ -17,5 +17,31 @@ module.exports =
 		       || req.connection.remoteAddress
 		       || req.socket.remoteAddress
 		       || req.connection.socket.remoteAddress;
+	},
+	objrid(obj, attrs)             //rid attr in a obj, and return new
+	{
+		const _rid = (obj, attr) =>
+		{
+			var _res = new Object();
+
+			for(var k in obj)
+			{
+				if(obj.hasOwnProperty(k) && k != attr)
+				{
+					console.log(k);
+					_res[k] = obj[k];
+				}
+			}
+
+			return _res;
+		}
+
+		if(typeof attrs == 'string')
+			return _rid(obj, attrs);
+
+		return attrs.reduce((str, attr) =>
+		{
+			return _rid(str, attr);
+		}, obj)
 	}
 }

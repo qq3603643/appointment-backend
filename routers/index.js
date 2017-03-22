@@ -25,8 +25,9 @@ module.exports = () =>
 	//cross domain
 	router.all('*', (req, res, next) =>
 	{
+
 		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "X-Requested-With");
+		res.header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Authorization, Accept, X-Requested-With, yourHeaderFeild, access-control-allow-methods, access-control-allow-origin, cache-control");
 		res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
 		res.header("X-Powered-By",' 3.2.1');
 		res.header("Content-Type", "application/json;charset=utf-8");
@@ -105,22 +106,6 @@ module.exports = () =>
 			 	console.log(err);
 			 	res.send({ status: 0, msg: 'database error' }).end();
 			 })
-	})
-
-	router.post('/loginCheck', (req, res, next) =>
-	{
-		res.cookie('test', 'testconetent', { domain: '.ypzdw.com', path: 'appoint', maxAge: 60 * 60 * 1e3 })
-		console.log(req.cookies)
-		user.isExist_p(req.body.userid)
-			.then(da =>
-			{
-				res.send({ status: 1, msg: 'success', data: da });
-			})
-			.catch(err =>
-			{
-				console.log(err);
-				res.send({ status: 0, msg: 'database error' }).end();
-			})
 	})
 
 	return router;

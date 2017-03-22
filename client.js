@@ -28,7 +28,7 @@ app.use(sessionParser(
 
 		return keys;
 	})(),
-	maxAge: 1 * 24 * 60 * 60 * 1000
+	maxAge: 66 * 24 * 60 * 60 * 1e3
 }))
 
 //post
@@ -44,6 +44,7 @@ app.engine('html', consolidate.ejs);
 
 //router
 app.use('/', require('./routers/index.js')());
+app.use('/login', require('./routers/login.js')());
 
 //static
 app.use(staticLib('./public'));
