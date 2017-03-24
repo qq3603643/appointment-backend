@@ -21,10 +21,11 @@ module.exports = () =>
 	router.post('/check', (req, res, next) =>
 	{
 		const uid  = req.cookies.userid,
-			_isP = req.session[uid] == 'true';console.log(_isP);
+			  _isP = req.session[uid] == 'true';console.log(_isP);
 
+		console.log(`someone is coming, uid: ${ uid }, _isLogined: ${ _isP }`);
 		_isP &&
-		 user.isExist_p(req.body.userid)
+		 user.isExist_p(uid)
 			.then(da =>
 			{
 				res.send({ status: 1, msg: 'success', data: da });
@@ -41,7 +42,7 @@ module.exports = () =>
 
 	router.post('/validate', (req, res, next) =>
 	{
-		console.log(req.body);
+		console.log(`someone is logining: ${ req.body }`);
 
 		user.validateU_p({ username: req.body.username, password: req.body.password })
 			.then(da =>
