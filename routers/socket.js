@@ -11,8 +11,8 @@ module.exports = (io) =>
         socket.on('login', (o) =>
         {
             container.add(o.userid, socket);
-            socket.name = o.userid;
 
+            socket.name = o.userid;
             io.emit('login', { userid: o.userid, onlineCount: container.size() });
             container.except(socket).forEach(otherSocket =>
             {
@@ -78,7 +78,7 @@ module.exports = (io) =>
             container.delete_s(socket);
             io.emit('logout', { userid: socket.name, onlineCount: container.size() });
 
-            console.log(`${socket.id} 退出系统`)
+            console.log(`${ socket.name } 退出系统`)
         })
 
     })

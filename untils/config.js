@@ -7,5 +7,6 @@ module.exports =
 		$ip: 'localhost',
 		$port: '27017',
 		$databasename: 'appointment'
-	}
+	},
+	allowOriginWithCookie: 'http://localhost:9999'
 }

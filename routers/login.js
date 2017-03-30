@@ -1,15 +1,17 @@
 const express = require('express'),
 	  user    = require('../models/user.js'),
-	  t       = require('../untils/common.js');
+	  t       = require('../untils/common.js'),
+	  CONFIG_G = require('../untils/config.js');
 
 module.exports = () =>
 {
 	const router = express.Router();
 
+	CONFIG_G.allowOriginWithCookie &&
 	router.all('*', (req, res, next) =>
 	{
 		/* 跨域携带cookie时 必须设置具体源 **/
-		res.header("Access-Control-Allow-Origin", "http://localhost:9999");
+		res.header("Access-Control-Allow-Origin", CONFIG_G.allowOriginWithCookie);
 		res.header("Access-Control-Allow-Credentials", true);
 		res.header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Authorization, Accept, X-Requested-With, yourHeaderFeild, access-control-allow-methods, access-control-allow-origin, cache-control");
 		res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
@@ -42,7 +44,7 @@ module.exports = () =>
 
 	router.post('/validate', (req, res, next) =>
 	{
-		console.log(`someone is logining: ${ req.body }`);
+		console.log(`someone is logining: ${ req.body.username }, ${ req.body.password }`);
 
 		user.validateU_p({ username: req.body.username, password: req.body.password })
 			.then(da =>

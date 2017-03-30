@@ -28,6 +28,18 @@ Socket.prototype =
 					return str.concat(socket.userid);
 			   }, new Array).length;
 	},
+	getuserid: function(socket)
+	{
+		var userid;
+
+		this.sockets.forEach(socketItem =>
+		{
+			if(socketItem.socket == socket)
+				userid = socketItem.userid;
+		})
+
+		return userid;
+	},
 	isExist: function(userid)	          //检测是否已存在
 	{
 		var _exist = false;
