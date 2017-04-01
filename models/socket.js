@@ -86,6 +86,8 @@ Socket.prototype =
 	delete_s: function(socket)
 	{
 		this.sockets = this.sockets.filter(o => o.socket != socket);
+
+		return this;
 	},
 	all: function()                      //获取所有连接实例
 	{
